@@ -24,7 +24,11 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const { data } = await client.queries.postConnection();
+  const { data } = await client.queries.postConnection({
+    first: 10,
+    sort: 'date',
+    filter: { draft: { eq: false } },
+  });
 
   if (!data.postConnection.edges) {
     return [];
@@ -40,36 +44,40 @@ export default async function Post({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const { data } = await client.queries.post({
-    relativePath: `${slug}.mdx`,
-  });
+  try {
+    const { slug } = await params;
+    const { data } = await client.queries.post({
+      relativePath: `${slug}.mdx`,
+    });
 
-  return (
-    <div className="mx-auto max-w-screen-lg px-8 py-10">
-      <div className="mb-10">
-        <h1 className="mb-4 text-3xl font-semibold">{data.post.title}</h1>
+    return (
+      <div className="mx-auto max-w-screen-lg px-8 py-10">
+        <div className="mb-10">
+          <h1 className="mb-4 text-3xl font-semibold">{data.post.title}</h1>
 
-        <div className="flex items-center gap-2 text-sm">
-          <time dateTime={data.post.date}>
-            {format(new Date(data.post.date), 'yyyy 年 MM 月 dd')}
-          </time>
-          &bull;
-          <span>
-            阅读时间 {readingTime(JSON.stringify(data.post.body))} 分钟
-          </span>
+          <div className="flex items-center gap-2 text-sm">
+            <time dateTime={data.post.date}>
+              {format(new Date(data.post.date), 'yyyy 年 MM 月 dd')}
+            </time>
+            &bull;
+            <span>
+              阅读时间 {readingTime(JSON.stringify(data.post.body))} 分钟
+            </span>
+          </div>
         </div>
+
+        <section className="slide-enter-content prose dark:prose-invert">
+          <Markdown content={data.post.body} />
+        </section>
+
+        <p className="my-10 text-gray-500 dark:text-gray-400">
+          # {data.post.topic?.name}
+        </p>
+
+        <BackLink />
       </div>
-
-      <section className="slide-enter-content prose dark:prose-invert">
-        <Markdown content={data.post.body} />
-      </section>
-
-      <p className="my-10 text-gray-500 dark:text-gray-400">
-        # {data.post.topic?.name}
-      </p>
-
-      <BackLink />
-    </div>
-  );
+    );
+  } catch {
+    notFound();
+  }
 }
