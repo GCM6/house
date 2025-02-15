@@ -8,6 +8,8 @@ import topic from './collections/topic';
 const branch =
   process.env.GITHUB_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || process.env.HEAD || 'main';
 
+  console.log(process.env.NEXT_PUBLIC_TINA_CLIENT_ID, 1234);
+  
 export default defineConfig({
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID, // Get this from tina.io

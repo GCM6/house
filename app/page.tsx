@@ -19,7 +19,7 @@ export default function Home() {
             wrapper="p"
             cursor={false}
             speed={20}
-            sequence={['嗨，我是 Jee 👋🏻']}
+            sequence={['嗨，我是 Ming 👋🏻']}
           />
           <p className="text-4xl font-semibold">
             一个 Web 开发者 · 终身学习者 · 游戏爱好者

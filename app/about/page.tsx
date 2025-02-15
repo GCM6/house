@@ -14,7 +14,7 @@ export default function About() {
         <section>
           <h3>我是谁</h3>
           <p>
-            嗨，我是 Jee，一个 Web 开发者，喜欢 Coding
+            嗨，我是 Ming，一个 Web 开发者，喜欢 Coding
             和电子游戏（尤其是魂类游戏 🎮 ）。
           </p>
         </section>
